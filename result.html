@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Scan Result | PhishKavach</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+
+        <a href="index.html" class="brand">
+
+            <svg class="brand-icon"
+                 width="32"
+                 height="32"
+                 viewBox="0 0 32 32"
+                 fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <path
+                    d="M16 2L27 6V14C27 21.5 22.5 27 16 30C9.5 27 5 21.5 5 14V6L16 2Z"
+                    fill="#1764F5"/>
+
+                <path
+                    d="M16 7L21 9V14C21 18.2 18.8 21.3 16 22.8C13.2 21.3 11 18.2 11 14V9L16 7Z"
+                    fill="white"/>
+
+            </svg>
+
+            <span class="brand-name">
+                Phish<span>Kavach</span>
+            </span>
+
+        </a>
+
+    </header>
+
+
+    <!-- RESULT PAGE -->
+    <main class="result-page">
+
+        <!-- HERO -->
+        <section class="result-hero">
+
+            <div class="result-label">
+                PHISHKAVACH SECURITY ANALYSIS
+            </div>
+
+            <h1>
+                URL Investigation
+            </h1>
+
+            <p>
+                We analyzed the submitted URL for suspicious
+                patterns, security indicators and potential threats.
+            </p>
+
+        </section>
+
+
+        <!-- INVESTIGATED URL -->
+        <section class="investigated-url">
+
+            <div class="section-label">
+                INVESTIGATED URL
+            </div>
+
+            <div id="scannedUrl" class="scanned-url">
+                Analyzing...
+            </div>
+
+            <div id="urlParts" class="url-parts"></div>
+
+        </section>
+
+
+        <!-- RISK OVERVIEW -->
+        <section class="risk-overview">
+
+            <div class="risk-score-area">
+
+                <div class="risk-circle" id="riskCircle">
+
+                    <div class="risk-circle-inner">
+
+                        <strong id="riskScore">
+                            0
+                        </strong>
+
+                        <span>
+                            / 100
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="risk-information">
+
+                <div id="riskBadge" class="risk-badge">
+                    ANALYZING
+                </div>
+
+                <h2 id="riskTitle">
+                    Analyzing URL...
+                </h2>
+
+                <p id="riskDescription">
+                    PhishKavach is investigating the submitted URL.
+                </p>
+
+                <div class="confidence-row">
+
+                    <span>
+                        Detection Confidence
+                    </span>
+
+                    <strong id="confidenceValue">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DETECTION LOGIC -->
+        <section class="detection-section">
+
+            <div class="section-heading">
+
+                <span class="section-number">
+                    01
+                </span>
+
+                <div>
+                    <div class="section-label">
+                        INVESTIGATION TRAIL
+                    </div>
+
+                    <h2>
+                        Why was this URL flagged?
+                    </h2>
+
+                    <p>
+                        These findings explain what PhishKavach
+                        detected in the submitted URL and why
+                        each signal matters.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div id="detectionTrail" class="detection-trail"></div>
+
+        </section>
+
+
+        <!-- TECHNICAL ANALYSIS -->
+        <section class="technical-section">
+
+            <div class="section-heading">
+
+                <span class="section-number">
+                    02
+                </span>
+
+                <div>
+                    <div class="section-label">
+                        TECHNICAL ANALYSIS
+                    </div>
+
+                    <h2>
+                        Security Intelligence
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="technical-grid">
+
+                <!-- URL SECURITY -->
+                <article class="analysis-card">
+
+                    <div class="analysis-card-header">
+
+                        <span class="analysis-icon">
+                            🔎
+                        </span>
+
+                        <div>
+                            <span class="analysis-label">
+                                URL SECURITY
+                            </span>
+
+                            <h3>
+                                URL Structure
+                            </h3>
+                        </div>
+
+                    </div>
+
+                    <div id="urlMetrics"></div>
+
+                </article>
+
+
+                <!-- DOMAIN -->
+                <article class="analysis-card">
+
+                    <div class="analysis-card-header">
+
+                        <span class="analysis-icon">
+                            🌐
+                        </span>
+
+                        <div>
+                            <span class="analysis-label">
+                                DOMAIN INTELLIGENCE
+                            </span>
+
+                            <h3>
+                                Domain Analysis
+                            </h3>
+                        </div>
+
+                    </div>
+
+                    <div id="domainAnalysis">
+                        Backend verification required.
+                    </div>
+
+                </article>
+
+
+                <!-- SSL -->
+                <article class="analysis-card">
+
+                    <div class="analysis-card-header">
+
+                        <span class="analysis-icon">
+                            🔐
+                        </span>
+
+                        <div>
+                            <span class="analysis-label">
+                                SSL / HTTPS
+                            </span>
+
+                            <h3>
+                                Connection Security
+                            </h3>
+                        </div>
+
+                    </div>
+
+                    <div id="sslAnalysis"></div>
+
+                </article>
+
+
+                <!-- THREAT INTELLIGENCE -->
+                <article class="analysis-card">
+
+                    <div class="analysis-card-header">
+
+                        <span class="analysis-icon">
+                            🚨
+                        </span>
+
+                        <div>
+                            <span class="analysis-label">
+                                THREAT INTELLIGENCE
+                            </span>
+
+                            <h3>
+                                Reputation Check
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                    <div id="threatIntel">
+                        Threat intelligence verification will be
+                        connected through the backend.
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ML ANALYSIS -->
+        <section class="ml-section">
+
+            <div class="section-heading">
+
+                <span class="section-number">
+                    03
+                </span>
+
+                <div>
+
+                    <div class="section-label">
+                        MACHINE LEARNING
+                    </div>
+
+                    <h2>
+                        Detection & ML Analysis
+                    </h2>
+
+                    <p>
+                        The final system will combine rule-based
+                        detection with a trained phishing
+                        classification model.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="ml-analysis">
+
+                <div class="ml-item">
+
+                    <span>
+                        MODEL
+                    </span>
+
+                    <strong id="mlPrediction">
+                        Backend model pending
+                    </strong>
+
+                </div>
+
+
+                <div class="ml-item">
+
+                    <span>
+                        PREDICTION PROBABILITY
+                    </span>
+
+                    <strong id="mlProbability">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FINAL ASSESSMENT -->
+        <section class="final-assessment">
+
+            <div class="section-label">
+                FINAL ASSESSMENT
+            </div>
+
+            <h2 id="finalTitle">
+                Analysis in progress
+            </h2>
+
+            <p id="finalDescription">
+                The final assessment will appear here after
+                the URL investigation is complete.
+            </p>
+
+            <div id="finalSignals"
+                 class="final-signals">
+            </div>
+
+
+            <button
+                class="download-report-btn"
+                onclick="window.print()">
+
+                Download / Print Report
+
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <!-- RESULT JAVASCRIPT -->
+    <script src="result.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PhishKavach</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&display=swap"
+        rel="stylesheet">
+
+    <!-- Statistics Number Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- =========================
+         SCAN COMPLETE TOAST STYLE
+    ========================== -->
+    <style>
+        .scan-toast {
+            position: fixed;
+            right: 28px;
+            bottom: 28px;
+            width: 350px;
+            max-width: calc(100vw - 40px);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid #dfe6ef;
+            border-radius: 14px;
+            box-shadow:
+                0 18px 45px rgba(16, 38, 75, 0.16);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(25px);
+            pointer-events: none;
+            transition:
+                opacity 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        .scan-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .scan-toast-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #eaf2ff;
+            color: #1764f5;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .scan-toast-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .scan-toast-content strong {
+            color: #10264b;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .scan-toast-content span {
+            color: #6b7a90;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .scan-toast-close {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            border: none;
+            background: transparent;
+            color: #7a8799;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            border-radius: 6px;
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .scan-toast-close:hover {
+            background: #f1f4f8;
+            color: #10264b;
+        }
+
+        .scan-toast.toast-high .scan-toast-icon {
+            background: #fff0f0;
+            color: #d92d20;
+        }
+
+        .scan-toast.toast-high {
+            border-color: #f1c7c5;
+        }
+
+        .scan-toast.toast-suspicious .scan-toast-icon {
+            background: #fff7e6;
+            color: #d98200;
+        }
+
+        .scan-toast.toast-suspicious {
+            border-color: #f0d9a8;
+        }
+
+        .scan-toast.toast-low .scan-toast-icon {
+            background: #eaf7ef;
+            color: #18864b;
+        }
+
+        .scan-toast.toast-low {
+            border-color: #c8e5d3;
+        }
+
+        @media (max-width: 600px) {
+            .scan-toast {
+                right: 15px;
+                bottom: 15px;
+                width: calc(100vw - 30px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVIGATION BAR
+    ========================== -->
+
+    <header class="navbar">
+
+        <a href="#" class="brand">
+
+            <img
+    src="assets/phishkavach-logo.png"
+    alt="PhishKavach - Detect, Analyze, Stay Safe"
+    class="brand-logo"
+>
+
+        </a>
+
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="nav-links">
+
+            <a href="#analyze" class="active">Analyze</a>
+
+            <a href="#how-it-works">How It Works</a>
+
+            <a href="#threat-library">Threat Library</a>
+
+            <a href="#awareness">Awareness</a>
+
+            <a href="#about">About</a>
+
+            <span class="nav-indicator"></span>
+
+        </nav>
+
+
+
+        <!-- ACCOUNT -->
+
+    <div class="nav-actions">
+
+    <button class="login-btn" id="loginBtn">
+    Log In
+</button>
+
+<button class="signup-btn" id="signupBtn">
+    Sign Up
+</button>
+
+</div>
+
+    </header>
+
+
+
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
+
+    <main id="analyze" class="hero">
+
+        <section class="hero-left">
+
+            <div class="hero-badge">
+
+                <span class="badge-icon">♢</span>
+
+                <span>SMART ANALYSIS</span>
+
+                <span>•</span>
+
+                <span>FAST RESULTS</span>
+
+                <span>•</span>
+
+                <span>DIGITAL SAFETY</span>
+
+            </div>
+
+
+
+            <h1 class="hero-title">
+
+                Is that
+                <span class="message-word">message</span>
+                real
+
+            </h1>
+
+
+
+            <div class="trap-line">
+
+                <span class="or-text">
+                    — or a
+                </span>
+
+                <div class="trap-cage">
+
+                    <span class="trap-word">
+                        trap?
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <p class="hero-description">
+
+                Analyze suspicious links, messages, emails and websites
+                <br>
+
+                before you trust them.
+                <strong>PhishKavach</strong> identifies phishing
+                <br>
+
+                signals and helps you understand the risk in seconds.
+
+            </p>
+
+        </section>
+
+
+
+        <!-- RIGHT SIDE RADAR -->
+
+        <section class="hero-right">
+
+            <div class="radar">
+
+                <div class="radar-circle circle-1"></div>
+
+                <div class="radar-circle circle-2"></div>
+
+                <div class="radar-circle circle-3"></div>
+
+                <div class="radar-circle circle-4"></div>
+
+                <div class="radar-center">
+                    ♢
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================
+         ANALYZER SECTION
+    ========================== -->
+
+    <section class="analyzer-section">
+
+        <div class="analyzer-card">
+
+            <div class="card-top-line"></div>
+
+            <div class="analyzer-title">
+                ENTER URL TO ANALYZE
+            </div>
+
+
+            
+
+            <div class="analyzer-row">
+
+    <div class="url-input">
+        <input
+            type="text"
+            placeholder="https://suspicious-link.com..."
+        >
+    </div>
+
+    <button class="clear-btn" aria-label="Clear">
+        <img src="assets/close.svg" alt="Clear">
+    </button>
+
+    <button class="paste-btn" aria-label="Paste">
+        <img src="assets/clipboard.svg" alt="Paste">
+    </button>
+
+    <button class="scan-btn">
+        <img
+            src="assets/shield.svg"
+            alt=""
+            class="scan-icon">
+        <span>Scan Now</span>
+    </button>
+
+</div>
+
+<div class="scan-quota">
+    <span class="scans-left">10 free scans left</span>
+</div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FEATURE STRIP
+    ========================== -->
+
+    <section class="feature-strip">
+
+        <div class="feature-item">
+
+            <span class="feature-icon">
+                ϟ
+            </span>
+
+            <strong>
+                3-second scan
+            </strong>
+
+        </div>
+
+
+
+        <div class="feature-item">
+
+            <span class="feature-icon">
+                ↗
+            </span>
+
+            <strong>
+                96.75%
+            </strong>
+
+            <span>
+                accuracy
+            </span>
+
+        </div>
+
+
+
+        <div class="feature-item">
+
+            <span class="feature-icon">
+                ♢
+            </span>
+
+            <strong>
+                100% free
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         STATISTICS SECTION
+    ========================== -->
+
+    <section class="stats-section">
+
+        <div class="stats-item">
+
+            <div class="stats-number" id="totalScans">
+                0
+            </div>
+
+            <div class="stats-label">
+                TOTAL SCANS
+            </div>
+
+        </div>
+
+
+
+        <div class="stats-item">
+
+            <div class="stats-number" id="highRiskCount">
+                0
+            </div>
+
+            <div class="stats-label">
+                HIGH RISK
+            </div>
+
+        </div>
+
+
+
+        <div class="stats-item">
+
+            <div class="stats-number" id="suspiciousCount">
+                0
+            </div>
+
+            <div class="stats-label">
+                SUSPICIOUS
+            </div>
+
+        </div>
+
+
+
+        <div class="stats-item">
+
+            <div class="stats-number" id="todayScans">
+                0
+            </div>
+
+            <div class="stats-label">
+                TODAY
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PHISHKAVACH SCAN RESULT
+    ====================================================== -->
+
+    <section id="scanResultSection" class="scan-result-section">
+
+        <div class="scan-result-container">
+
+            <div class="scan-result-header">
+
+                <div class="result-mini-label">
+                    PHISHKAVACH SECURITY ANALYSIS
+                </div>
+
+                <h2>URL Investigation Result</h2>
+
+                <p>
+                    Analysis of the URL submitted to PhishKavach.
+                </p>
+
+            </div>
+
+
+
+            <!-- INVESTIGATED URL -->
+
+            <div class="investigated-url-box">
+
+                <span class="result-label">
+                    INVESTIGATED URL
+                </span>
+
+                <div id="resultURL" class="result-url">
+                    —
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 WEBSITE PREVIEW
+            ================================================== -->
+
+            <div id="websitePreviewSection" class="website-preview-section">
+
+                <div class="website-preview-header">
+
+                    <div>
+
+                        <span class="result-mini-label">
+                            WEBSITE PREVIEW
+                        </span>
+
+                        <h3>
+                            Visual Inspection
+                        </h3>
+
+                    </div>
+
+                    <span id="previewStatus" class="preview-status">
+                        PREVIEW READY
+                    </span>
+
+                </div>
+
+
+
+                <div class="website-preview-browser">
+
+                    <div class="preview-browser-bar">
+
+                        <div class="preview-browser-dots">
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                        </div>
+
+
+
+                        <div class="preview-address-bar">
+
+                            <span class="preview-lock">
+                                🔒
+                            </span>
+
+                            <span id="previewURL">
+                                —
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="preview-frame-wrapper">
+
+                        <div id="previewLoading" class="preview-loading">
+
+                            <div class="preview-loader"></div>
+
+                            <span>
+                                Loading website preview...
+                            </span>
+
+                        </div>
+
+
+
+                        <iframe
+                            id="websitePreviewFrame"
+                            class="website-preview-frame"
+                            title="Investigated Website Preview"
+                            sandbox="allow-scripts allow-forms allow-popups"
+                            referrerpolicy="no-referrer"
+                            loading="lazy">
+                        </iframe>
+
+
+
+                        <div id="previewBlocked" class="preview-blocked">
+
+                            <div class="preview-blocked-icon">
+                                🔒
+                            </div>
+
+                            <h4>
+                                Website Preview Unavailable
+                            </h4>
+
+                            <p>
+                                This website does not allow itself to be
+                                displayed inside a preview window.
+                            </p>
+
+                            <span>
+                                The URL can still be analyzed by PhishKavach.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="preview-security-note">
+
+                    <span>ⓘ</span>
+
+                    <p>
+                        This is a sandboxed visual preview. PhishKavach
+                        analyzes the URL separately and does not treat the
+                        preview as proof that a website is safe.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RISK OVERVIEW -->
+
+            <div class="result-risk-layout">
+
+                <div class="result-score-wrapper">
+
+                    <div id="resultRiskCircle" class="result-risk-circle">
+
+                        <div class="result-score-inner">
+
+                            <strong id="resultRiskScore">
+                                0
+                            </strong>
+
+                            <span>/100</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="result-verdict">
+
+                    <span id="resultRiskBadge" class="result-risk-badge">
+                        ANALYZING
+                    </span>
+
+                    <h3 id="resultRiskTitle">
+                        Analyzing URL...
+                    </h3>
+
+                    <p id="resultRiskDescription">
+                        PhishKavach is analyzing the submitted URL.
+                    </p>
+
+                    <div class="result-confidence">
+
+                        <span>
+                            Detection Confidence
+                        </span>
+
+                        <strong id="resultConfidence">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DETECTION LOGIC -->
+
+            <div class="detection-analysis">
+
+                <div class="result-section-heading">
+
+                    <span class="result-section-number">
+                        01
+                    </span>
+
+                    <div>
+
+                        <span class="result-mini-label">
+                            INVESTIGATION TRAIL
+                        </span>
+
+                        <h3>
+                            Why did PhishKavach reach this result?
+                        </h3>
+
+                        <p>
+                            PhishKavach examined the submitted URL
+                            and identified the following signals.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="resultDetectionTrail"
+                    class="result-detection-trail">
+                </div>
+
+            </div>
+
+
+
+            <!-- TECHNICAL ANALYSIS -->
+
+            <div class="result-technical">
+
+                <div class="result-section-heading">
+
+                    <span class="result-section-number">
+                        02
+                    </span>
+
+                    <div>
+
+                        <span class="result-mini-label">
+                            TECHNICAL ANALYSIS
+                        </span>
+
+                        <h3>
+                            Security Intelligence
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="result-analysis-grid">
+
+                    <!-- URL -->
+
+                    <div class="result-analysis-item">
+
+                        <span class="result-analysis-icon">
+                            🔎
+                        </span>
+
+                        <div>
+
+                            <span class="result-analysis-label">
+                                URL SECURITY
+                            </span>
+
+                            <h4>
+                                URL Structure
+                            </h4>
+
+                        </div>
+
+                        <div id="resultURLMetrics"
+                            class="result-metrics">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DOMAIN -->
+
+                    <div class="result-analysis-item">
+
+                        <span class="result-analysis-icon">
+                            🌐
+                        </span>
+
+                        <div>
+
+                            <span class="result-analysis-label">
+                                DOMAIN INTELLIGENCE
+                            </span>
+
+                            <h4>
+                                Domain Analysis
+                            </h4>
+
+                        </div>
+
+                        <div id="resultDomain"
+                            class="result-placeholder">
+                            Backend domain analysis pending.
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- SSL -->
+
+                    <div class="result-analysis-item">
+
+                        <span class="result-analysis-icon">
+                            🔐
+                        </span>
+
+                        <div>
+
+                            <span class="result-analysis-label">
+                                SSL / HTTPS
+                            </span>
+
+                            <h4>
+                                Connection Security
+                            </h4>
+
+                        </div>
+
+                        <div id="resultSSL"
+                            class="result-placeholder">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- THREAT INTELLIGENCE -->
+
+                    <div class="result-analysis-item">
+
+                        <span class="result-analysis-icon">
+                            🚨
+                        </span>
+
+                        <div>
+
+                            <span class="result-analysis-label">
+                                THREAT INTELLIGENCE
+                            </span>
+
+                            <h4>
+                                Reputation Check
+                            </h4>
+
+                        </div>
+
+                        <div id="resultThreatIntel"
+                            class="result-placeholder">
+                            External threat intelligence is not currently configured.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ML -->
+
+            <div class="result-ml-section">
+
+                <div class="result-section-heading">
+
+                    <span class="result-section-number">
+                        03
+                    </span>
+
+                    <div>
+
+                        <span class="result-mini-label">
+                            MACHINE LEARNING
+                        </span>
+
+                        <h3>
+                            Detection &amp; ML Analysis
+                        </h3>
+
+                        <p>
+                            The trained phishing detection model evaluated
+                            the URL using extracted URL features.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="result-ml-grid">
+
+                    <div>
+
+                        <span>
+                            MODEL
+                        </span>
+
+                        <strong id="resultMLModel">
+                            Backend model pending
+                        </strong>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <span>
+                            PREDICTION PROBABILITY
+                        </span>
+
+                        <strong id="resultMLProbability">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FINAL ASSESSMENT -->
+
+            <div class="result-final">
+
+                <span class="result-mini-label">
+                    FINAL ASSESSMENT
+                </span>
+
+                <h3 id="resultFinalTitle">
+                    Analysis complete
+                </h3>
+
+                <p id="resultFinalDescription">
+                    The URL analysis has been completed.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         HOW IT WORKS
+    ========================== -->
+
+    <section id="how-it-works" class="how-it-works-section">
+
+        <div class="how-it-works-container">
+
+            <div class="how-it-works-label">
+                HOW IT WORKS
+            </div>
+
+
+
+            <h2 class="how-it-works-title">
+
+                <span class="how-title-dark">
+                    How PhishKavach
+                </span>
+
+                <br>
+
+                <span class="how-title-blue">
+                    Sees Beyond the Link
+                </span>
+
+            </h2>
+
+
+
+            <p class="how-it-works-description">
+
+                A suspicious link can look perfectly genuine at first glance.
+                <strong>PhishKavach</strong> examines the signals behind a URL
+                to uncover signs of phishing, suspicious behavior, and potential
+                threats—helping you decide whether a link deserves your trust.
+
+            </p>
+
+
+
+            <div class="how-steps">
+
+                <div class="how-step-card">
+
+                    <div class="step-number">
+                        01
+                    </div>
+
+                    <div class="step-icon step-icon-red">
+                        !
+                    </div>
+
+                    <h3>
+                        Paste a Suspicious Link
+                    </h3>
+
+                    <p>
+                        Copy any suspicious URL from a message, email,
+                        website or social media and paste it into
+                        PhishKavach for analysis.
+                    </p>
+
+                </div>
+
+
+
+                <div class="how-step-card">
+
+                    <div class="step-number">
+                        02
+                    </div>
+
+                    <div class="step-icon step-icon-blue">
+                        ◇
+                    </div>
+
+                    <h3>
+                        PhishKavach Analyzes the URL
+                    </h3>
+
+                    <p>
+                        PhishKavach examines the URL for phishing signals,
+                        suspicious patterns and other indicators that may
+                        reveal potential threats.
+                    </p>
+
+                </div>
+
+
+
+                <div class="how-step-card">
+
+                    <div class="step-number">
+                        03
+                    </div>
+
+                    <div class="step-icon step-icon-green">
+                        ✓
+                    </div>
+
+                    <h3>
+                        Understand the Safety Verdict
+                    </h3>
+
+                    <p>
+                        Get a clear result showing whether the link appears
+                        Safe, Suspicious, or High Risk so you can make a
+                        safer decision before clicking.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         THREAT LIBRARY DIVIDER
+    ========================== -->
+
+    <div class="threat-library-divider"></div>
+
+
+
+    <!-- =========================
+         THREAT LIBRARY PREVIEW
+    ========================== -->
+
+    <section id="threat-library" class="threat-library-preview">
+
+        <div class="threat-library-content">
+
+            <div class="threat-library-label">
+                THREAT LIBRARY
+            </div>
+
+            <h2 class="threat-library-title">
+                Know the threat
+                <span>before it reaches you.</span>
+            </h2>
+
+            <p class="threat-library-description">
+                Phishing attacks are constantly evolving.
+                Explore common techniques and learn how attackers
+                make malicious links and websites appear trustworthy.
+            </p>
+
+        </div>
+
+
+
+        <div class="threat-cards">
+
+            <div class="threat-card threat-card-left threat-red">
+
+                <div class="threat-number">
+                    01
+                </div>
+
+                <div class="threat-card-content">
+
+                    <h3>
+                        Email Phishing
+                    </h3>
+
+                    <p>
+                        Deceptive emails designed to make users
+                        trust a malicious message or link.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="threat-card threat-card-right threat-blue">
+
+                <div class="threat-number">
+                    02
+                </div>
+
+                <div class="threat-card-content">
+
+                    <h3>
+                        Smishing
+                    </h3>
+
+                    <p>
+                        Phishing attempts delivered through SMS
+                        or messaging platforms.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="threat-card threat-card-left threat-orange">
+
+                <div class="threat-number">
+                    03
+                </div>
+
+                <div class="threat-card-content">
+
+                    <h3>
+                        Spear Phishing
+                    </h3>
+
+                    <p>
+                        Targeted phishing attacks crafted for a
+                        specific person or organization.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="threat-card threat-card-right threat-green">
+
+                <div class="threat-number">
+                    04
+                </div>
+
+                <div class="threat-card-content">
+
+                    <h3>
+                        QR Phishing
+                    </h3>
+
+                    <p>
+                        Malicious QR codes that redirect users
+                        toward fraudulent destinations.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <a href="threat-library.html" class="threat-library-btn">
+            Explore Threat Library
+            <span>→</span>
+        </a>
+
+    </section>
+
+
+
+    <!-- =========================
+         AWARENESS SECTION
+    ========================== -->
+
+    <section id="awareness" class="awareness-section">
+
+        <div class="awareness-divider"></div>
+
+        <div class="awareness-content">
+
+            <div class="awareness-label">
+                AWARENESS
+            </div>
+
+            <h2 class="awareness-title">
+                Think before
+                <span>you click.</span>
+            </h2>
+
+            <p class="awareness-description">
+                Learn how to recognize phishing attempts,
+                suspicious messages, and common warning signs.
+            </p>
+
+            <a href="awareness.html" class="threat-library-btn">
+                Explore Awareness
+                <span>→</span>
+            </a>
+
+            <div class="awareness-bottom-divider"></div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         ABOUT SECTION
+    ========================== -->
+
+    <section id="about" class="about-section">
+
+        <div class="about-divider"></div>
+
+        <div class="about-content">
+
+            <div class="about-label">
+                ABOUT
+            </div>
+
+            <h2 class="about-title">
+                Built for safer
+                <span>digital decisions.</span>
+            </h2>
+
+            <p class="about-description">
+                PhishKavach is designed to help users identify suspicious
+                links, understand phishing threats, and make safer decisions
+                before clicking.
+            </p>
+
+            <div class="about-values">
+
+                <span>
+                    Analyze
+                </span>
+
+                <span>
+                    ·
+                </span>
+
+                <span>
+                    Understand
+                </span>
+
+                <span>
+                    ·
+                </span>
+
+                <span>
+                    Stay Safe
+                </span>
+
+            </div>
+
+            <div class="about-closing">
+
+                <strong>
+                    PhishKavach
+                </strong>
+
+                <span>
+                    Security starts with awareness.
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FEEDBACK SECTION
+    ========================== -->
+
+    <section id="feedback" class="feedback-section">
+
+        <div class="feedback-content">
+
+            <div class="feedback-label">
+                FEEDBACK
+            </div>
+
+            <h2 class="feedback-title">
+                Was PhishKavach
+                <span>helpful?</span>
+            </h2>
+
+            <p class="feedback-description">
+                Your feedback helps us make phishing awareness
+                simpler and more useful.
+            </p>
+
+            <div class="feedback-buttons">
+
+                <button class="feedback-btn feedback-yes">
+
+                    <span>
+                        ✓
+                    </span>
+
+                    Yes, it helped
+
+                </button>
+
+                <button class="feedback-btn feedback-no">
+
+                    <span>
+                        ×
+                    </span>
+
+                    Not really
+
+                </button>
+
+            </div>
+
+            <p class="feedback-thanks" id="feedbackThanks">
+                Thank you for your feedback.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="site-footer">
+
+        <div class="footer-main">
+
+            <div class="footer-brand">
+
+                <a href="#analyze" class="brand footer-brand-link">
+
+                    <svg class="brand-icon"
+                        viewBox="0 0 48 54"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+
+                        <path
+                            d="M24 2L43 9V24C43 36 35.5 46.5 24 52C12.5 46.5 5 36 5 24V9L24 2Z"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linejoin="round" />
+
+                        <path
+                            d="M24 17V34"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round" />
+
+                        <path
+                            d="M18 23H30"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round" />
+
+                    </svg>
+
+                    <span class="brand-name">
+                        Phish<span>Kavach</span>
+                    </span>
+
+                </a>
+
+                <p>
+                    Security starts with awareness.
+                </p>
+
+            </div>
+
+
+
+            <div class="footer-links">
+
+                <div class="footer-column">
+
+                    <h3>
+                        Explore
+                    </h3>
+
+                    <a href="#analyze">
+                        Analyze
+                    </a>
+
+                    <a href="#how-it-works">
+                        How It Works
+                    </a>
+
+                    <a href="#threat-library">
+                        Threat Library
+                    </a>
+
+                    <a href="#awareness">
+                        Awareness
+                    </a>
+
+                </div>
+
+
+
+                <div class="footer-column">
+
+                    <h3>
+                        PhishKavach
+                    </h3>
+
+                    <a href="#about">
+                        About
+                    </a>
+
+                    <a href="#feedback">
+                        Feedback
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 PhishKavach
+            </span>
+
+            <span>
+                Analyze · Understand · Stay Safe
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- SCAN LIMIT WARNING -->
+<div id="scanLimitModal" class="scan-limit-overlay">
+
+    <div class="scan-limit-box">
+
+        <div class="scan-limit-icon">
+            <span>!</span>
+        </div>
+
+        <h3>Unable to Continue Scanning</h3>
+
+        <p>
+            You've reached the current scanning limit.
+            Please try again later.
+        </p>
+
+        <button id="closeScanLimit">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+
+
+    <!-- =========================
+         SCAN COMPLETE TOAST
+    ========================== -->
+
+    <div id="scanToast" class="scan-toast">
+
+        <div class="scan-toast-icon" id="scanToastIcon">
+            ✓
+        </div>
+
+        <div class="scan-toast-content">
+
+            <strong id="scanToastTitle">
+                Scan Complete
+            </strong>
+
+            <span id="scanToastMessage">
+                URL analysis is ready.
+            </span>
+
+        </div>
+
+        <button
+            id="scanToastClose"
+            class="scan-toast-close"
+            aria-label="Close">
+            ×
+        </button>
+
+    </div>
+
+
+
+    <script type="module" src="script.js"></script>
+
+    <script type="module" src="auth.js"></script>
+
+    <script type="module" src="scan-history.js"></script>
+
+    
+
+</body>
+
+</html>
